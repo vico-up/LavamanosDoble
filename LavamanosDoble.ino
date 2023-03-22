@@ -46,8 +46,24 @@ int tiempito2 = 2100; //pareca que este va a ser maximo
 //int tiempito3 = 3200;
 int ultimoTiempito;
 
-const int botonJabonn = 17;
+const int botonJabonn = 17; //variable para modo continuo
+bool estadoPulsadorJabon;
+
 const int botonJabonn2 = 18;
+bool estadoPulsadorJabon2;
+
+
+bool encenderLedAgua = false;     //si led es anodo comun ennceder con logica negativa
+bool apagarLedAgua = true;
+
+bool encenderLedJabon = false;
+bool apagarLedJabon = true;
+
+bool encenderLedAgua2 = false;     //si led es anodo comun ennceder con logica negativa
+bool apagarLedAgua2 = true;
+
+bool encenderLedJabon2 = false;
+bool apagarLedJabon2 = true;
 
 pt ptActivarAgua;
 int activarAguaThread(struct pt* pt)
@@ -97,7 +113,7 @@ int activarAgua2Thread(struct pt* pt)
     {
         if(estadoSensorAgua2 == false) //compara con logica negativa por el sensor es NPN(se activa con logica negativa)
         {
-            digitalWrite(ledOnAgua, LOW);  //led enciende con LOW
+            digitalWrite(ledOnAgua2, LOW);  //led enciende con LOW
             digitalWrite(bombaAgua2, LOW);
             PT_SLEEP(pt, 5000);   //tiempo de espera para evitar falso del sensor de agua y no apague y prenda
         }
@@ -105,7 +121,7 @@ int activarAgua2Thread(struct pt* pt)
         else
         {
             
-            digitalWrite(ledOnAgua, HIGH);
+            digitalWrite(ledOnAgua2, HIGH);
             digitalWrite(bombaAgua2, HIGH);
             PT_YIELD(pt);
         }
@@ -252,6 +268,11 @@ void setup()
     pinMode(botonJabonn, INPUT_PULLUP);
     pinMode(botonJabonn2, INPUT_PULLUP);
 
+    digitalWrite(ledOnAgua, HIGH);
+    digitalWrite(ledOnAgua2, HIGH);
+    digitalWrite(ledOnJabon, HIGH);
+    digitalWrite(ledOnJabon2, HIGH);
+
 }
 
 void loop()
@@ -267,6 +288,8 @@ void loop()
 
     PT_SCHEDULE(ActivarDispensador2Thread(&ptActivarDispensador2));
     PT_SCHEDULE(SensorJabon2Thread(&ptSensorJabon2));
+
+    
 
     estadoBotonTiempito = digitalRead(botonTiempito); //Lee pulsador de cantidad de dispensado de jabon
     if (estadoBotonTiempito != UltestadoBotonTiempito)
@@ -295,16 +318,7 @@ void loop()
       {
         modo3();
       }*/
-
-    while (digitalRead(botonJabonn) == true)  //modo continuo de jabon
-    {
-        jabonContinuo();
-    }
-
-    while (digitalRead(botonJabonn2) == true)  //modo continuo de jabon
-    {
-        jabonContinuo2();
-    }
+    
 }
 
 void llamarBuzzer()
@@ -407,8 +421,20 @@ void jabonContinuo()
   digitalWrite(dispensador, LOW);
 }
 
+void jabonContinuoOff()
+{
+    digitalWrite(ledOnJabon, HIGH);
+    digitalWrite(dispensador, HIGH);
+}
+
 void jabonContinuo2()
 {
   digitalWrite(ledOnJabon2, LOW);
   digitalWrite(dispensador2, LOW);
+}
+
+void jabonContinuoOff2()
+{
+    digitalWrite(ledOnJabon2, HIGH);
+    digitalWrite(dispensador2, HIGH);
 }
