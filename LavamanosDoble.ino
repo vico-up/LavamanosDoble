@@ -1,7 +1,14 @@
 /*
+Version de lavamanos doble funcionando las siguientes funcionalidades
+
+Sensores leyendo
+relay activando
+boton de antidad de jabon funcioanando
+led de activcion funcionando
+
+
 Tareas
-* Testear led si es anado comun o catodo
-    poner botones como pullup
+incluir botones de despensdo continuo
 */
 
 #include <protothreads.h>
